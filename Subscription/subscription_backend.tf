@@ -32,7 +32,7 @@ data "terraform_remote_state" "subscription" {
     resource_group_name  = var.remote_state_rg
     storage_account_name = var.remote_state_sa_name
     container_name       = var.remote_state_container
-    key                  = var.remote_state_key_core
+    key                  = var.remote_state_key_subscription
     subscription_id      = var.subscription_id
     tenant_id            = var.tenant_id
   }
