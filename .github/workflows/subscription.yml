@@ -2,46 +2,46 @@ name: 'AzurePolicy-deployment'
 
 on:
   workflow_dispatch:
-inputs:
-      Azure Policy Definition Name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Definition name to be applied'
-        # Default value if no value is explicitly provided
-        default: 'Azure Kubernetes Service Private Clusters should be enabled'
-        # Input has to be provided for the workflow to run
-        required: true
-        # The data type of the input
-        type: choice
-        options:
-        - Azure Policy Add-on for Kubernetes service (AKS) should be installed and enabled on your clusters
-        - Azure Kubernetes Service Private Clusters should be enabled
-        - Authorized IP ranges should be defined on Kubernetes Services
-        - Azure Kubernetes Clusters should enable Container Storage Interface(CSI)
-        - Azure Kubernetes Clusters should use Azure CNI
-        
-      policy_scope_type:
-        description: 'Scope of the policy assignment'
-        default: Resource Group
-        required: true
-        type: choice
-        options:
-        - Resource_Group
-        - Subcription
-        - Management
-        
-      ResourceID:
-        description: 'Resource ID for which you want to apply the policy'
-        required: true
-        type: string
-        
-      Effect:
-        description: 'Policy effect like deny,audit,disabled'
-        required: true
-        type: choice
-        options:
-        - deny
-        - audit
-        - disabled
+    inputs:
+          Azure Policy Definition Name:
+            # Friendly description to be shown in the UI instead of 'name'
+            description: 'Definition name to be applied'
+            # Default value if no value is explicitly provided
+            default: 'Azure Kubernetes Service Private Clusters should be enabled'
+            # Input has to be provided for the workflow to run
+            required: true
+            # The data type of the input
+            type: choice
+            options:
+            - Azure Policy Add-on for Kubernetes service (AKS) should be installed and enabled on your clusters
+            - Azure Kubernetes Service Private Clusters should be enabled
+            - Authorized IP ranges should be defined on Kubernetes Services
+            - Azure Kubernetes Clusters should enable Container Storage Interface(CSI)
+            - Azure Kubernetes Clusters should use Azure CNI
+            
+          policy_scope_type:
+            description: 'Scope of the policy assignment'
+            default: Resource Group
+            required: true
+            type: choice
+            options:
+            - Resource_Group
+            - Subcription
+            - Management
+            
+          ResourceID:
+            description: 'Resource ID for which you want to apply the policy'
+            required: true
+            type: string
+            
+          Effect:
+            description: 'Policy effect like deny,audit,disabled'
+            required: true
+            type: choice
+            options:
+            - deny
+            - audit
+            - disabled
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
