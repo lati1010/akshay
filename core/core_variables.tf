@@ -94,14 +94,14 @@ variable "remote_state_key_core" {
 locals {
 
   core_shared_services_us_id_map = {   
-        "nprd-pr" = "f4bd0018-73c9-4248-827f-01718adad3c4"
-        "prod-pr" = "4803a165-bc99-4492-8bd2-1e7a878008bb"  
+        "nprd-pr" = ""
+        "prod-pr" = ""  
         "prod-dr" = ""
     }
     
   core_sharedsvcs_us_logging_rg = {
-    "nprd-pr" = "rg-nprd-pr-sharedsvc-logging"
-    "prod-pr" = "rg-prod-shared-oms-proxy"
+    "nprd-pr" = ""
+    "prod-pr" = ""
     "prod-dr" = ""
     }
     
