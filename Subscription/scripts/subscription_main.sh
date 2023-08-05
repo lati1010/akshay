@@ -2,12 +2,12 @@
 
 
 
-if [ "$TERRAFORM_ACTION" = "core-plan" ]
+if [ "$TERRAFORM_ACTION" = "subscrption-plan" ]
 then
     # Initialize Terraform
     #**********************************************************************************************
-    cd ./core
-    bash ./scripts/core_plan_logo.sh
+    cd ./Subscription
+    bash ./scripts/subscription_plan_logo.sh
     echo "Terraform init"
     /usr/bin/terraform init -no-color -upgrade=true \
         -backend-config "resource_group_name=$TF_VAR_remote_state_rg" \
@@ -19,21 +19,21 @@ then
     #**********************************************************************************************
 
 
-    # Terraform Plan Core
+    # Terraform Plan subscription
     #**********************************************************************************************
     echo ""
-    echo "Terraform Plan - Core"
-    /usr/bin/terraform plan -no-color -input=false -out=tfplan-core -var-file="core_config.tfvars"
+    echo "Terraform Plan - subscription"
+    /usr/bin/terraform plan -no-color -input=false -out=tfplan-core -var-file="subscription_config.tfvars"
     cd ..
     #**********************************************************************************************
-elif [ "$TERRAFORM_ACTION" = "core-apply" ]
+elif [ "$TERRAFORM_ACTION" = "subscription-apply" ]
 then
     # Terraform Apply Core
     #**********************************************************************************************
     cd ./core
-    bash ./scripts/core_apply_logo.sh
+    bash ./scripts/subscription_apply_logo.sh
     echo ""
-    echo "Terraform Apply - Core"
+    echo "Terraform Apply - subscription"
     /usr/bin/terraform apply -input=false -no-color tfplan-core
     cd ..
     #**********************************************************************************************
