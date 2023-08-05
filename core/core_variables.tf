@@ -106,8 +106,8 @@ locals {
     }
     
   core_sharedsvcs_us_log_analytics_private_link_scope_name = {
-    "nprd-pr" = "nprd-pr-sharedsvc-logaw-pls"
-    "prod-pr" = "prod-sharedservice-azmonitorpls"
+    "nprd-pr" = ""
+    "prod-pr" = ""
     "prod-dr" = ""
     }
 
