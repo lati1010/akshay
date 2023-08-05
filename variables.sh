@@ -31,9 +31,9 @@ TF_VAR_postfix="@@TF_VAR_postfix@@"
 
 # Required Azure Variables
 #**********************************************************************************************
-TF_VAR_location="@@TF_VAR_location@@"
-TF_VAR_subscription_id="@@TF_VAR_subscription_id@@"
-TF_VAR_tenant_id="@@TF_VAR_tenant_id@@"
+TF_VAR_location="East US"
+TF_VAR_subscription_id="79be621b-a188-406b-affb-2b0c00bc0d97"
+TF_VAR_tenant_id="716e32a2-2f56-4567-a78d-e347d95858a3"
 #**********************************************************************************************
 
 
