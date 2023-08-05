@@ -103,13 +103,13 @@ jobs:
       run: | 
         bash ../variables.sh
     
-    - name: Checkout Component Library
-      uses: actions/checkout@v2
-      with:
-        repository: aks-us/${{ env.CL_REPOSITORY }}
-        ref: '${{ env.CL_VERSION }}'
-        path: '${{ env.CL_REPOSITORY }}'
-        token: ${{ steps.token.outputs.token }}
+    # - name: Checkout Component Library
+    #   uses: actions/checkout@v2
+    #   with:
+    #     repository: aks-us/${{ env.CL_REPOSITORY }}
+    #     ref: '${{ env.CL_VERSION }}'
+    #     path: '${{ env.CL_REPOSITORY }}'
+    #     token: ${{ steps.token.outputs.token }}
     
     - name: Remote state
       run: |
