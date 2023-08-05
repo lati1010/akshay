@@ -1,0 +1,300 @@
+name: 'infrastructure-deployment'
+
+on:
+  workflow_dispatch:
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  JENKINS_APP_GATEWAY_FRONTEND_TLS_CERTA:  ${{ secrets.JENKINS_APP_GATEWAY_FRONTEND_TLS_CERTA }} 
+  JENKINS_APP_GATEWAY_FRONTEND_TLS_CERT_PASSA: ${{ secrets.JENKINS_APP_GATEWAY_FRONTEND_TLS_CERT_PASSA }}
+  JENKINS_APP_GATEWAY_FRONTEND_TLS_CERT_PFXA: "./APP_GATEWAY_FRONTEND_TLS_CERTA.pfx" 
+  TF_VAR_SHARED_KEY: ${{ secrets.SHARED_KEY }}              #Remove it if the deployment is not in US tenant
+  
+jobs:
+  terraform_core_plan:
+    name: 'Terraform Core Plan'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./core/
+
+    steps:
+
+    - name: installation token
+      id: token
+      uses: getsentry/action-github-app-token@v1
+      with:
+        app_id: ${{ secrets.CL_TF_ACL_APP_ID}}
+        private_key: ${{ secrets.CL_TF_ACL_APP_PRIVATE_PEM}}
+
+    - name: Checkout Pattern
+      uses: actions/checkout@v2 
+
+    - name: Load Environment Variables
+      run: | 
+        bash ../variables.sh
+    
+    - name: Checkout Component Library
+      uses: actions/checkout@v2
+      with:
+        repository: aks-us/${{ env.CL_REPOSITORY }}
+        ref: '${{ env.CL_VERSION }}'
+        path: '${{ env.CL_REPOSITORY }}'
+        token: ${{ steps.token.outputs.token }}
+    
+    - name: Remote state
+      run: |
+       source ../variables.sh && source ../scripts/predefined_variables.sh
+       bash ../scripts/tf_remote_state.sh
+       
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ env.TF_VERSION }}   
+ 
+    - name: Terraform Init
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        terraform init \
+        -backend-config "resource_group_name"=$TF_VAR_remote_state_rg  \
+        -backend-config "storage_account_name"=$TF_VAR_remote_state_sa_name  \
+        -backend-config "container_name"=$TF_VAR_remote_state_container  \
+        -backend-config "key"=$TF_VAR_remote_state_key_core  \
+        -backend-config "subscription_id"=$TF_VAR_subscription_id  \
+        -backend-config "tenant_id"=$TF_VAR_tenant_id 
+      
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan 
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        terraform plan -no-color -input=false -out=tfplan-core -var-file="environments/core_config.tfvars" \
+          -var="cl_version=${{ env.CL_VERSION }}" \
+          -var="tf_version=${{ env.TF_VERSION }}" \
+          -var="pvdr_version=${{ env.PVDR_VERSION }}" \
+          -var="repository_id=${{ github.repository }}" \
+          -var="github_actor=${{ github.actor }}"
+    
+  terraform_core_apply:
+    name: 'Terraform Core Apply'
+    runs-on: ubuntu-latest
+    environment: core-apply
+    needs: terraform_core_plan
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./core/
+
+    steps:
+
+    - name: installation token
+      id: token
+      uses: getsentry/action-github-app-token@v1
+      with:
+        app_id: ${{ secrets.CL_TF_ACL_APP_ID}}
+        private_key: ${{ secrets.CL_TF_ACL_APP_PRIVATE_PEM}}
+
+    - name: Checkout Pattern
+      uses: actions/checkout@v2 
+
+    - name: Load Environment Variables
+      run: | 
+        bash ../variables.sh
+    
+    - name: Checkout Component Library
+      uses: actions/checkout@v2
+      with:
+        repository: aks-us/${{ env.CL_REPOSITORY }}
+        ref: '${{ env.CL_VERSION }}'
+        path: '${{ env.CL_REPOSITORY }}'
+        token: ${{ steps.token.outputs.token }}
+    
+    - name: Remote state
+      run: |
+       source ../variables.sh && source ../scripts/predefined_variables.sh
+       bash ../scripts/tf_remote_state.sh
+       
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ env.TF_VERSION }}   
+ 
+    - name: Terraform Init
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        terraform init \
+        -backend-config "resource_group_name"=$TF_VAR_remote_state_rg  \
+        -backend-config "storage_account_name"=$TF_VAR_remote_state_sa_name  \
+        -backend-config "container_name"=$TF_VAR_remote_state_container  \
+        -backend-config "key"=$TF_VAR_remote_state_key_core  \
+        -backend-config "subscription_id"=$TF_VAR_subscription_id  \
+        -backend-config "tenant_id"=$TF_VAR_tenant_id 
+      
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan 
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        terraform plan -no-color -input=false -out=tfplan-core -var-file="environments/core_config.tfvars" \
+          -var="cl_version=${{ env.CL_VERSION }}" \
+          -var="tf_version=${{ env.TF_VERSION }}" \
+          -var="pvdr_version=${{ env.PVDR_VERSION }}" \
+          -var="repository_id=${{ github.repository }}" \
+          -var="github_actor=${{ github.actor }}"
+    
+    - name: Terraform Apply
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        terraform apply  -input=false -no-color tfplan-core
+
+  terraform_pattern_plan:
+    name: 'Terraform Pattern Plan'
+    needs: terraform_core_apply
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./pattern/
+
+    steps:
+    
+    - name: installation token
+      id: token
+      uses: getsentry/action-github-app-token@v1
+      with:
+        app_id: ${{ secrets.CL_TF_ACL_APP_ID}}
+        private_key: ${{ secrets.CL_TF_ACL_APP_PRIVATE_PEM}}
+
+    - name: Checkout Pattern
+      uses: actions/checkout@v2 
+
+    - name: Load Environment Variables
+      run: | 
+        bash ../variables.sh
+    
+    - name: Checkout Component Library
+      uses: actions/checkout@v2
+      with:
+        repository: aks-us/${{ env.CL_REPOSITORY }}
+        ref: '${{ env.CL_VERSION }}'
+        path: '${{ env.CL_REPOSITORY }}'
+        token: ${{ steps.token.outputs.token }}
+
+    - name: Azure Login
+      uses: Azure/login@v1.4.5
+      with:
+        creds: '{"clientId":"${{ env.ARM_CLIENT_ID }}","clientSecret":"${{ env.ARM_CLIENT_SECRET }}","subscriptionId":"","tenantId":""}'
+        enable-AzPSSession: true
+        environment: AzureCloud   #AzureCloud, AzureUSGovernment 
+    
+    - name: Remote state
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        bash ../scripts/tf_remote_state.sh
+       
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ env.TF_VERSION }}         
+ 
+    - name: Terraform Init
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        terraform init \
+        -backend-config "resource_group_name"=$TF_VAR_remote_state_rg  \
+        -backend-config "storage_account_name"=$TF_VAR_remote_state_sa_name  \
+        -backend-config "container_name"=$TF_VAR_remote_state_container  \
+        -backend-config "key"=$TF_VAR_remote_state_key_pattern  \
+        -backend-config "subscription_id"=$TF_VAR_subscription_id  \
+        -backend-config "tenant_id"=$TF_VAR_tenant_id 
+          
+    # Generates an execution plan for Terraform
+    - name: Terraform pattern Plan 
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        source ../pattern/scripts/functions.sh
+        appgw_cert  
+        terraform plan -no-color -input=false -out=tfplan-pattern -var-file="environments/pattern_config.tfvars" \
+          -var="cl_version=${{ env.CL_VERSION }}" \
+          -var="tf_version=${{ env.TF_VERSION }}" \
+          -var="pvdr_version=${{ env.PVDR_VERSION }}" \
+          -var="repository_id=${{ github.repository }}" \
+          -var="github_actor=${{ github.actor }}"
+
+  terraform_pattern_apply:
+    name: 'Terraform Pattern Apply'
+    needs: terraform_pattern_plan
+    runs-on: ubuntu-latest
+    environment: pattern-apply
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./pattern/
+
+    steps:
+    
+    - name: installation token
+      id: token
+      uses: getsentry/action-github-app-token@v1
+      with:
+        app_id: ${{ secrets.CL_TF_ACL_APP_ID}}
+        private_key: ${{ secrets.CL_TF_ACL_APP_PRIVATE_PEM}}
+
+    - name: Checkout Pattern
+      uses: actions/checkout@v2 
+
+    - name: Load Environment Variables
+      run: | 
+        bash ../variables.sh
+    
+    - name: Checkout Component Library
+      uses: actions/checkout@v2
+      with:
+        repository: aks-us/${{ env.CL_REPOSITORY }}
+        ref: '${{ env.CL_VERSION }}'
+        path: '${{ env.CL_REPOSITORY }}'
+        token: ${{ steps.token.outputs.token }}
+    
+    - name: Remote state
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        bash ../scripts/tf_remote_state.sh
+       
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ env.TF_VERSION }}     
+ 
+    - name: Terraform Init
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        terraform init \
+        -backend-config "resource_group_name"=$TF_VAR_remote_state_rg  \
+        -backend-config "storage_account_name"=$TF_VAR_remote_state_sa_name  \
+        -backend-config "container_name"=$TF_VAR_remote_state_container  \
+        -backend-config "key"=$TF_VAR_remote_state_key_pattern  \
+        -backend-config "subscription_id"=$TF_VAR_subscription_id  \
+        -backend-config "tenant_id"=$TF_VAR_tenant_id 
+          
+    # Generates an execution plan for Terraform
+    - name: Terraform pattern Plan 
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        source ../pattern/scripts/functions.sh
+        appgw_cert  
+        terraform plan -no-color -input=false -out=tfplan-pattern -var-file="environments/pattern_config.tfvars" \
+          -var="cl_version=${{ env.CL_VERSION }}" \
+          -var="tf_version=${{ env.TF_VERSION }}" \
+          -var="pvdr_version=${{ env.PVDR_VERSION }}" \
+          -var="repository_id=${{ github.repository }}" \
+          -var="github_actor=${{ github.actor }}"
+
+     
+    - name: Terraform Apply
+      run: |
+        source ../variables.sh && source ../scripts/predefined_variables.sh
+        terraform apply  -input=false -no-color tfplan-pattern
+
