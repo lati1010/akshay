@@ -71,9 +71,6 @@ variable "cl_tfstate_storage_account_enable_network_rules" {
     type = bool
     default = true
 }
-variable "cl_tfstate_core_module_name" {
-    description = " (Required) Specifies the core module name for depends on clause - needed since tf state sa vnet rules and pe connection depend on spoke vnet." 
-}
 //**********************************************************************************************
 
 
