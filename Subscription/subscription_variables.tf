@@ -84,7 +84,7 @@ variable "remote_state_sa_name" {
 variable "remote_state_container" {
     description = "(Required) The remote state container name in the storage account."
 }
-variable "remote_state_key_core" {
+variable "remote_state_key_subscription" {
     description = "(Required) The remote state key where the state file will be saved to."
 }
 //**********************************************************************************************
