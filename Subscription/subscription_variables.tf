@@ -94,15 +94,15 @@ variable "remote_state_key_core" {
 locals {
 
   core_shared_services_us_id_map = {   
-        "nprd-pr" = ""
-        "prod-pr" = ""  
-        "prod-dr" = ""
+        "nprd-pr" = "79be621b-a188-406b-affb-2b0c00bc0d97"
+        "prod-pr" = "79be621b-a188-406b-affb-2b0c00bc0d97"  
+        "prod-dr" = "79be621b-a188-406b-affb-2b0c00bc0d97"
     }
     
   core_sharedsvcs_us_logging_rg = {
-    "nprd-pr" = ""
-    "prod-pr" = ""
-    "prod-dr" = ""
+    "nprd-pr" = "testrg"
+    "prod-pr" = "testrg"
+    "prod-dr" = "testrg"
     }
     
   core_sharedsvcs_us_log_analytics_private_link_scope_name = {
