@@ -190,7 +190,7 @@ jobs:
           -var="tf_version=${{ env.TF_VERSION }}" \
           -var="pvdr_version=${{ env.PVDR_VERSION }}" \
           -var="repository_id=${{ github.repository }}" \
-          -var="github_actor=${{ github.actor }}"
+          -var="github_actor=${{ github.actor }}" \
           -var="resourceid=${{ github.event.inputs.ResourceID }}"
     
     - name: Terraform Apply
