@@ -35,6 +35,13 @@ variable "repository_id" {
 variable "github_actor" {
   description = "(Required) Tags for resources."
 }
+variable "resourceid" {
+   type = string
+   description = "The resourceid"
+   default = ${{ github.event.inputs.ResourceID }}
+}
+
+
 //**********************************************************************************************
     
 // TF remote state SA selected network access & PE VARS
