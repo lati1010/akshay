@@ -21,7 +21,7 @@ on:
             
           policy_scope_type:
             description: 'Scope of the policy assignment'
-            default: Resource Group
+            default: Resource_Group
             required: true
             type: choice
             options:
@@ -45,6 +45,7 @@ on:
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ResourceID: ${{ github.event.inputs.ResourceID }}
   Azure Policy Add-on for Kubernetes service (AKS) should be installed and enabled on your clusters: "/providers/Microsoft.Authorization/policyDefinitions/#####################"
   Azure Kubernetes Service Private Clusters should be enabled: "/providers/Microsoft.Authorization/policyDefinitions/#####################"
   Azure Kubernetes Clusters should enable Container Storage Interface(CSI): "/providers/Microsoft.Authorization/policyDefinitions/#####################"
