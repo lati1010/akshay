@@ -38,7 +38,7 @@ variable "github_actor" {
 variable "resourceid" {
    type = string
    description = "The resourceid"
-   default = ${{ github.event.inputs.ResourceID }}
+   default = ""
 }
 
 
