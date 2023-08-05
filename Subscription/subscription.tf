@@ -5,7 +5,7 @@
   description = "Shows all virtual machines not using managed disks"
   display_name = "OS and data disks should be encrypted with a customer-managed key"
   }
-  resource "azurerm_resource_policy_assignment" "cmkkeyforvmsrg" {
+  resource "azurerm_resource_group_policy_assignment" "cmkkeyforvmsrg" {
   name = "vm-disk-cmkkeyrg"
   resource_id = var.resourceid
   policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/702dd420-7fcc-42c5-afe8-4026edd20fe0"
