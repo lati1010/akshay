@@ -26,7 +26,7 @@ terraform {
 
 // Data for Core Terraform remote state
 //**********************************************************************************************
-data "terraform_remote_state" "core" {
+data "terraform_remote_state" "subscription" {
   backend = "azurerm"
   config = {
     resource_group_name  = var.remote_state_rg
