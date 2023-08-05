@@ -24,8 +24,8 @@ echo "TF_VERSION=$TF_VERSION" >> $GITHUB_ENV
 
 # Common Variables
 #**********************************************************************************************
-TF_VAR_env="@@TF_VAR_env@@"
-TF_VAR_postfix="@@TF_VAR_postfix@@"
+TF_VAR_env="test"
+TF_VAR_postfix="tfg"
 #**********************************************************************************************
 
 
