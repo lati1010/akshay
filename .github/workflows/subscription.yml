@@ -200,7 +200,7 @@ jobs:
 
     - name: Terraform Destroy
       run: |
-        source ../variables.sh && source ../scripts/predefined_variables.sh
+        # source ../variables.sh && source ../scripts/predefined_variables.sh
         terraform destroy -auto-approve
 
         
