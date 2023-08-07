@@ -188,7 +188,7 @@ jobs:
     - name: Terraform Plan 
       run: |
         source ../variables.sh && source ../scripts/predefined_variables.sh
-        terraform plan -no-color -input=false -out=tfplan-subscription -var-file="environments/subscription_config.tfvars" \
+        terraform plan -no-color -lock=false -input=false -out=tfplan-subscription -var-file="environments/subscription_config.tfvars" \
           -var="cl_version=${{ env.CL_VERSION }}" \
           -var="tf_version=${{ env.TF_VERSION }}" \
           -var="pvdr_version=${{ env.PVDR_VERSION }}" \
