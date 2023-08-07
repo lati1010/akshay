@@ -132,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: subscription-apply
     needs: terraform_subscription_plan
-    if: ${{ github.event.inputs.policy_scope_type == 'Subcriptiorn' }}
+    if: ${{ github.event.inputs.policy_scope_type == 'Subcription' }}
 
     defaults:
       run:
@@ -195,6 +195,8 @@ jobs:
           -var="repository_id=${{ github.repository }}" \
           -var="github_actor=${{ github.actor }}" \
           -var="resourceid=${{ github.event.inputs.ResourceID }}"
+          -var="definitionid=${{ env[inputs.policy_definition_name] }}"
+
     
     - name: Terraform Apply
       run: |
