@@ -18,6 +18,7 @@ on:
             - Authorized IP ranges should be defined on Kubernetes Services
             - Azure Kubernetes Clusters should enable Container Storage Interface(CSI)
             - Azure Kubernetes Clusters should use Azure CNI
+            - OS and data disks should be encrypted with a customer-managed key
             
           policy_scope_type:
             description: 'Scope of the policy assignment'
@@ -46,6 +47,7 @@ env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ResourceID: ${{ github.event.inputs.ResourceID }}
+  OS and data disks should be encrypted with a customer-managed key: "/providers/Microsoft.Authorization/policyDefinitions/702dd420-7fcc-42c5-afe8-4026edd20fe0"
   Azure Policy Add-on for Kubernetes service (AKS) should be installed and enabled on your clusters: "/providers/Microsoft.Authorization/policyDefinitions/#####################"
   Azure Kubernetes Service Private Clusters should be enabled: "/providers/Microsoft.Authorization/policyDefinitions/#####################"
   Azure Kubernetes Clusters should enable Container Storage Interface(CSI): "/providers/Microsoft.Authorization/policyDefinitions/#####################"
@@ -123,13 +125,14 @@ jobs:
           -var="repository_id=${{ github.repository }}" \
           -var="github_actor=${{ github.actor }}" \
           -var="resourceid=${{ github.event.inputs.ResourceID }}"
+          -var="definitionid=${{ github.event.inputs.ResourceID }}"
     
   terraform_subscription_apply:
     name: 'Terraform Subscription Apply'
     runs-on: ubuntu-latest
     environment: subscription-apply
     needs: terraform_subscription_plan
-    if: ${{ github.event.inputs.policy_scope_type == 'Subcription' }}
+    if: ${{ github.event.inputs.policy_scope_type == 'Subcriptiorn' }}
 
     defaults:
       run:
