@@ -22,5 +22,5 @@
   resource "azurerm_management_group_policy_assignment" "example" {
     name                 = "example-policy"
     policy_definition_id = var.definitionid
-    management_group_id  = var.resourceid
+    management_group_id  = "716e32a2-2f56-4567-a78d-e347d95858a3"
   }
