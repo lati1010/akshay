@@ -40,7 +40,11 @@ variable "resourceid" {
    description = "The resourceid"
    default = ""
 }
-
+variable "definitionid" {
+   type = string
+   description = "The definitionid"
+   default = ""
+}
 
 //**********************************************************************************************
     
