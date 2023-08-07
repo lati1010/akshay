@@ -201,7 +201,7 @@ jobs:
     - name: Terraform Apply
       run: |
         source ../variables.sh && source ../scripts/predefined_variables.sh
-        terraform apply  -input=false -no-color tfplan-subscription
+        terraform apply -lock=false -input=false -no-color tfplan-subscription
 
     - name: Terraform Destroy
       run: |
