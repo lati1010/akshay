@@ -19,3 +19,8 @@
   description = "Shows all virtual machines not using managed d3333isks"
   display_name = "OS and data disks should be encrypted with a customer-managed keyr4444g"
   }
+  resource "azurerm_management_group_policy_assignment" "example" {
+    name                 = "example-policy"
+    policy_definition_id = var.definitionid
+    management_group_id  = var.resourceid
+  }
