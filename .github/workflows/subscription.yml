@@ -3,7 +3,7 @@ name: 'AzurePolicy-deployment'
 on:
   workflow_dispatch:
     inputs:
-          Azure Policy Definition Name:
+          policy_definition_name:
             # Friendly description to be shown in the UI instead of 'name'
             description: 'Definition name to be applied'
             # Default value if no value is explicitly provided
@@ -125,7 +125,7 @@ jobs:
           -var="repository_id=${{ github.repository }}" \
           -var="github_actor=${{ github.actor }}" \
           -var="resourceid=${{ github.event.inputs.ResourceID }}"
-          -var="definitionid=${{ github.event.inputs.ResourceID }}"
+          -var="definitionid=${{ github.event.inputs.policy_definition_name }}"
     
   terraform_subscription_apply:
     name: 'Terraform Subscription Apply'
