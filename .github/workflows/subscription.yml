@@ -125,7 +125,6 @@ jobs:
           -var="repository_id=${{ github.repository }}" \
           -var="github_actor=${{ github.actor }}" \
           -var="resourceid=${{ github.event.inputs.ResourceID }}"
-          -var="definitionid=${{ env.github.event.inputs.policy_definition_name }}"
           -var="definitionid=${{ env[inputs.policy_definition_name] }}"
     
   terraform_subscription_apply:
