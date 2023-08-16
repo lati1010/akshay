@@ -3,5 +3,5 @@
   subscription_id = var.resourceid
   policy_definition_id = var.definitionid
   description = var.name
-  display_name = var.name-var.effect
+  display_name = var.name+var.effect
   }
