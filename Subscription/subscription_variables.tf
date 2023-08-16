@@ -46,6 +46,16 @@ variable "definitionid" {
    default = ""
 }
 
+variable "effect" {
+   type = string
+   description = "The effect of the policy"
+   default = ""
+}
+variable "name" {
+   type = string
+   description = "The name of the policy"
+   default = ""
+}
 //**********************************************************************************************
     
 // TF remote state SA selected network access & PE VARS
