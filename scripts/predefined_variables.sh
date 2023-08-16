@@ -15,7 +15,7 @@ set -a #Make all following local variables environment variables
 TF_VAR_remote_state_rg="rg-$TF_VAR_env-$TF_VAR_postfix-tf-state"
 TF_VAR_remote_state_sa_name="sa$env_no_dash$postfix_no_dash"
 TF_VAR_remote_state_container="tfcontainer"
-TF_VAR_remote_state_key_subscription="tf_state/$TF_VAR_env/$TF_VAR_postfix-core.tfstate"
+TF_VAR_remote_state_key_subscription="tf_state/$TF_VAR_env/$TF_VAR_postfix-core-$TF_VAR_random.tfstate"
 TF_VAR_remote_state_key_pattern="tf_state/$TF_VAR_env/$TF_VAR_postfix-pattern.tfstate"
 #**********************************************************************************************
 
