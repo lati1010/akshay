@@ -83,7 +83,7 @@ jobs:
 
     - name: Load Environment Variables
       run: | 
-        bash ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }}
+        bash ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}}
     
     # - name: Checkout Component Library
     #   uses: actions/checkout@v2
@@ -95,7 +95,7 @@ jobs:
     
     - name: Remote state
       run: |
-       source ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }} && source ../scripts/predefined_variables.sh
+       source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
        bash ../scripts/tf_remote_state.sh
        
     - name: Setup Terraform
@@ -105,7 +105,7 @@ jobs:
  
     - name: Terraform Init
       run: |
-        source ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform init \
         -backend-config "resource_group_name"=$TF_VAR_remote_state_rg  \
         -backend-config "storage_account_name"=$TF_VAR_remote_state_sa_name  \
@@ -117,7 +117,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan 
       run: |
-        source ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform plan -lock=false -no-color -input=false -out=tfplan-subscription -var-file="environments/subscription_config.tfvars" \
           -var="cl_version=${{ env.CL_VERSION }}" \
           -var="tf_version=${{ env.TF_VERSION }}" \
@@ -125,7 +125,9 @@ jobs:
           -var="repository_id=${{ github.repository }}" \
           -var="github_actor=${{ github.actor }}" \
           -var="resourceid=${{ github.event.inputs.ResourceID }}" \
-          -var="definitionid=${{ env[inputs.policy_definition_name] }}"
+          -var="definitionid=${{ env[inputs.policy_definition_name] }}" \
+          -var="name"=${{ github.event.inputs.policy_definition_name }}" \
+          -var="effect"=${{ github.event.inputs.Effect }}"
     
   terraform_subscription_apply:
     name: 'Terraform Subscription Apply'
@@ -153,7 +155,7 @@ jobs:
 
     - name: Load Environment Variables
       run: | 
-        bash ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }}
+        bash ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}}
     
     # - name: Checkout Component Library
     #   uses: actions/checkout@v2
@@ -165,7 +167,7 @@ jobs:
     
     - name: Remote state
       run: |
-       source ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }} && source ../scripts/predefined_variables.sh
+       source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
        bash ../scripts/tf_remote_state.sh
        
     - name: Setup Terraform
@@ -175,7 +177,7 @@ jobs:
  
     - name: Terraform Init
       run: |
-        source ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform init \
         -backend-config "resource_group_name"=$TF_VAR_remote_state_rg  \
         -backend-config "storage_account_name"=$TF_VAR_remote_state_sa_name  \
@@ -187,7 +189,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan 
       run: |
-        source ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform plan -no-color -lock=false -input=false -out=tfplan-subscription -var-file="environments/subscription_config.tfvars" \
           -var="cl_version=${{ env.CL_VERSION }}" \
           -var="tf_version=${{ env.TF_VERSION }}" \
@@ -195,12 +197,14 @@ jobs:
           -var="repository_id=${{ github.repository }}" \
           -var="github_actor=${{ github.actor }}" \
           -var="resourceid=${{ github.event.inputs.ResourceID }}" \
-          -var="definitionid=${{ env[inputs.policy_definition_name] }}"
+          -var="definitionid=${{ env[inputs.policy_definition_name] }}" \
+          -var="name"=${{ github.event.inputs.policy_definition_name }}" \
+          -var="effect"=${{ github.event.inputs.Effect }}"
 
     
     - name: Terraform Apply
       run: |
-        source ../variables.sh ${{github.run_number}} ${{ env[inputs.policy_definition_name] }} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform apply -lock=false -input=false -no-color tfplan-subscription
 
     # - name: Terraform Destroy
