@@ -49,7 +49,7 @@ env:
   ResourceID: ${{ github.event.inputs.ResourceID }}
   OS and data disks should be encrypted with a customer-managed key: "/providers/Microsoft.Authorization/policyDefinitions/702dd420-7fcc-42c5-afe8-4026edd20fe0"
   Azure Policy Add-on for Kubernetes service (AKS) should be installed and enabled on your clusters: "/providers/Microsoft.Authorization/policyDefinitions/0a15ec92-a229-4763-bb14-0ea34a568f8d"
-  Azure Kubernetes Service Private Clusters should be enabled: "/providers/Microsoft.Authorization/policyDefinitions/#####################"
+  Azure Kubernetes Service Private Clusters should be enabled: "/providers/Microsoft.Authorization/policyDefinitions/040732e8-d947-40b8-95d6-854c95024bf8"
   Azure Kubernetes Clusters should enable Container Storage Interface(CSI): "/providers/Microsoft.Authorization/policyDefinitions/#####################"
   Authorized IP ranges should be defined on Kubernetes Services: /providers/Microsoft.Authorization/policyDefinitions/#####################""
   Azure Kubernetes Clusters should use Azure CNI: "/providers/Microsoft.Authorization/policyDefinitions/#####################"
@@ -83,7 +83,8 @@ jobs:
 
     - name: Load Environment Variables
       run: | 
-        bash ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}}
+        # bash ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}}
+        bash ../variables.sh ${{github.run_number}}
     
     # - name: Checkout Component Library
     #   uses: actions/checkout@v2
@@ -95,7 +96,8 @@ jobs:
     
     - name: Remote state
       run: |
-       source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+       # source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+       source ../variables.sh ${{github.run_number}} && source ../scripts/predefined_variables.sh
        bash ../scripts/tf_remote_state.sh
        
     - name: Setup Terraform
@@ -105,7 +107,8 @@ jobs:
  
     - name: Terraform Init
       run: |
-        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        # source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform init \
         -backend-config "resource_group_name"=$TF_VAR_remote_state_rg  \
         -backend-config "storage_account_name"=$TF_VAR_remote_state_sa_name  \
@@ -117,7 +120,8 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan 
       run: |
-        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        # source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform plan -lock=false -no-color -input=false -out=tfplan-subscription -var-file="environments/subscription_config.tfvars" \
           -var="cl_version=${{ env.CL_VERSION }}" \
           -var="tf_version=${{ env.TF_VERSION }}" \
@@ -155,7 +159,8 @@ jobs:
 
     - name: Load Environment Variables
       run: | 
-        bash ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}}
+        # bash ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}}
+        bash ../variables.sh ${{github.run_number}}
     
     # - name: Checkout Component Library
     #   uses: actions/checkout@v2
@@ -167,7 +172,8 @@ jobs:
     
     - name: Remote state
       run: |
-       source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+       # source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+       source ../variables.sh ${{github.run_number}} && source ../scripts/predefined_variables.sh
        bash ../scripts/tf_remote_state.sh
        
     - name: Setup Terraform
@@ -177,7 +183,8 @@ jobs:
  
     - name: Terraform Init
       run: |
-        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        # source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform init \
         -backend-config "resource_group_name"=$TF_VAR_remote_state_rg  \
         -backend-config "storage_account_name"=$TF_VAR_remote_state_sa_name  \
@@ -189,7 +196,8 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan 
       run: |
-        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        # source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform plan -no-color -lock=false -input=false -out=tfplan-subscription -var-file="environments/subscription_config.tfvars" \
           -var="cl_version=${{ env.CL_VERSION }}" \
           -var="tf_version=${{ env.TF_VERSION }}" \
@@ -204,7 +212,8 @@ jobs:
     
     - name: Terraform Apply
       run: |
-        source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        # source ../variables.sh ${{ env[inputs.policy_definition_name] }} ${{github.run_number}} && source ../scripts/predefined_variables.sh
+        source ../variables.sh ${{github.run_number}} && source ../scripts/predefined_variables.sh
         terraform apply -lock=false -input=false -no-color tfplan-subscription
 
     # - name: Terraform Destroy
