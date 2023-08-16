@@ -1,5 +1,5 @@
   resource "azurerm_subscription_policy_assignment" "cmkkeyforvms" {
-  name = "vm-disk-cmkkey"
+  name = "vm-disk-cmkke1y"
   subscription_id = var.resourceid
   policy_definition_id = var.definitionid
   description = "Shows all virtual machines not using managed disks"
