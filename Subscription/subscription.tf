@@ -1,5 +1,5 @@
   resource "azurerm_subscription_policy_assignment" "AKSAzurePolicy" {
-  name = "${substr("${var.name}", 0, min(length("${var.name}"), 20))}"
+  name = "${var.effect}-${substr("${var.name}", 0, min(length("${var.name}"), 47))}"
   subscription_id = var.resourceid
   policy_definition_id = var.definitionid
   description = var.name
