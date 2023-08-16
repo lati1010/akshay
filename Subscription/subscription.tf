@@ -1,7 +1,7 @@
-  resource "azurerm_subscription_policy_assignment" "cmkkeyforvms" {
-  name = "vm-disk-cmkke1y"
+  resource "azurerm_subscription_policy_assignment" "AKSAzurePolicy" {
+  name =var.name-var.subscription_id
   subscription_id = var.resourceid
   policy_definition_id = var.definitionid
-  description = "Shows all virtual machines not using managed disks"
-  display_name = "OS and data disks should be encrypted with a customer-managed key"
+  description = var.name
+  display_name = var.name-var.effect
   }
