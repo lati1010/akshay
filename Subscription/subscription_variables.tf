@@ -56,6 +56,26 @@ variable "name" {
    description = "The name of the policy"
    default = ""
 }
+variable "Audit_policies" {
+    type = list(object({
+        policy_name = string
+        def_id = string
+        }))
+    default = [
+    {policy_name = "test1", def_id = "/provider/microsoft.authorization/policydefinitions/123dfrfggghh"},
+    {policy_name = "test2", def_id = "/provider/microsoft.authorization/policydefinitions/0123dfrfggghh"}
+    ]
+}
+variable "Deny_policies" {
+    type = list(object({
+        policy_name = string
+        def_id = string
+        }))
+    default = [
+    {policy_name = "test1", def_id = "/provider/microsoft.authorization/policydefinitions/123dfrfggghh"},
+    {policy_name = "test2", def_id = "/provider/microsoft.authorization/policydefinitions/0123dfrfggghh"}
+    ]
+}
 //**********************************************************************************************
     
 // TF remote state SA selected network access & PE VARS
